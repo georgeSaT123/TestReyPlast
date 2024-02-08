@@ -40,5 +40,23 @@ namespace ApiUsuarios.Controllers
             }
             return usuarios;
         }
+
+        [HttpPost]
+        public void Create([FromBody] Usuario usuario)
+        {
+            using (SqlConnection sqlConnection = new(connection))
+            {
+                sqlConnection.Open();
+                using (SqlCommand cmd = new("SP_InsertarUsuario", sqlConnection))
+                {
+                    cmd.CommandType = System.Data.CommandType.StoredProcedure;
+                    cmd.Parameters.AddWithValue("@Id", usuario.Id);
+                    cmd.Parameters.AddWithValue("@Nombres", usuario.Nombres);
+                    cmd.Parameters.AddWithValue("@Apellidos", usuario.Apellidos);
+                    cmd.ExecuteNonQuery();
+                }
+            }
+        }
+
     }
 }
