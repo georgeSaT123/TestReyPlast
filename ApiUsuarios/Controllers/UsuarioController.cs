@@ -58,5 +58,35 @@ namespace ApiUsuarios.Controllers
             }
         }
 
+        [HttpPut("{id}")]
+        public void Update([FromBody] Usuario usuario, int id)
+        {
+            using (SqlConnection sqlConnection = new(connection))
+            {
+                sqlConnection.Open();
+                using (SqlCommand cmd = new("SP_ActualizarUsuario", sqlConnection))
+                {
+                    cmd.CommandType = System.Data.CommandType.StoredProcedure;
+                    cmd.Parameters.AddWithValue("@Id", usuario.Id);
+                    cmd.Parameters.AddWithValue("@Nombres", usuario.Nombres);
+                    cmd.Parameters.AddWithValue("@Apellidos", usuario.Apellidos);
+                    cmd.ExecuteNonQuery();
+                }
+            }
+        }
+        [HttpDelete("{id}")]
+        public void Delete(int id)
+        {
+            using (SqlConnection sqlConnection = new(connection))
+            {
+                sqlConnection.Open();
+                using (SqlCommand cmd = new("SP_EliminarUsuario", sqlConnection))
+                {
+                    cmd.CommandType = System.Data.CommandType.StoredProcedure;
+                    cmd.Parameters.AddWithValue("@Id", id);
+                    cmd.ExecuteNonQuery();
+                }
+            }
+        }
     }
 }
